@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 
-depth1 = "data/depth-910.897600001.txt"
-depth2 = "data/depth-911.094202001.txt"
-depth3 = "data/depth-930.983771001.txt"
+depth1 = "data/April 29/depth-910.897600001.txt"
+depth2 = "data/April 29/depth-911.094202001.txt"
+depth3 = "data/April 29/depth-930.983771001.txt"
 
 camXYZ1 = np.array([0.547282388237575, 0.157351187292134, -0.0254139935371636]).transpose()
 camQuat1 = np.array([0.501725122125409, -0.240603849434341, -0.353766788261331, 0.751818295194313])
@@ -54,6 +54,37 @@ def parseDepth(file):
 
     return XYZ
 
+
+def parsePoseQuat(file):
+    x = []
+    y = []
+    z = []
+    q1 = []
+    q2 = []
+    q3 = []
+    q4 = []
+    with open(file) as f:
+        for _ in xrange(2):
+            next(f)
+        for line in (f):
+            element = line.strip().split(",")
+            print element
+            x = float(element[3][1:len(element[3])])
+            y = float(element[4])
+            z = float(element[5][0:(len(element[5]) - 1)])
+            q1 = float(element[6][2:len(element[6])])
+            q2 = float(element[7])
+            q3 = float(element[8])
+            q4 = float(element[9][0:(len(element[9]) - 1)])
+            print q1
+
+    XYZ = np.hstack(((x, y), z))
+    quat12 = np.hstack((q1, q2))
+    quat34 = np.hstack((q3, q4))
+    QT = np.hstack((quat12, quat34))
+
+    return XYZ, QT
+
 def quat2mat(qt):
 
     q11 = 1 - (2*qt[1]*qt[1]) - (2*qt[2]*qt[2])
@@ -96,7 +127,7 @@ depth2cam3 = np.dot(rotMat3,depths3.transpose()) + camXYZ3.reshape((3,1))
 #ax.set_zlabel('Z')
 #plt.show()
 
-np.savetxt('export/depth2cam3.txt',depth2cam3.transpose(),delimiter='\t')
+#np.savetxt('export/depth2cam3.txt',depth2cam3.transpose(),delimiter='\t')
 #np.savetxt('export/depth2cam1.txt',depth2cam1.transpose(),delimiter='\t')
 #np.savetxt('export/depth2cam2.txt',depth2cam2.transpose(),delimiter='\t')
 
