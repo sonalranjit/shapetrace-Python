@@ -7,7 +7,6 @@ Demonstrating a cloud of points.
 """
 
 import numpy as np
-
 from vispy import gloo
 from vispy import app
 from vispy.util.transforms import perspective, translate, rotate
@@ -39,7 +38,7 @@ def parseDepth(file):
 
     return XYZ
 
-rawDepth = "data/May9/depth-168.940137001.txt"
+rawDepth = "data/May 12/depth-482.768256001.txt"
 depth = parseDepth(rawDepth)
 
 vert = """
@@ -252,9 +251,9 @@ class Canvas(app.Canvas):
         #add turntable view
 
         #Filename
-        filename = 'export/depths1.txt'
+        filename = 'export/garbage-can.txt'
         #load data
-        xyz = depth
+        xyz = np.loadtxt(filename)
         #Create the Vertices
         n = len(xyz)
         data = np.zeros(n,[('a_position', np.float32, 3),
@@ -320,6 +319,7 @@ class Canvas(app.Canvas):
         self.program['u_view'] = self.view
         self.program['u_size'] = 5 / self.translate
         self.update
+
 
     def on_draw(self, event):
         gloo.clear()

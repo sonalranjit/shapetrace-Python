@@ -25,9 +25,11 @@ def parsePoseQuat(file):
             q3 = float(element[8])
             q4 = float(element[9][0:(len(element[9])-1)])
 
-    XYZ = np.hstack(((x,y),z))
+    XYZ = np.array(np.hstack(((x,y),z))).reshape((3,1))
     quat12 = np.hstack((q1,q2))
     quat34 = np.hstack((q3,q4))
-    QT = np.hstack((quat12,quat34))
+    QT = np.array(np.hstack((quat12,quat34))).reshape(4,1)
 
-    return XYZ, QT
+    print XYZ
+
+parsePoseQuat(poseTxt)
